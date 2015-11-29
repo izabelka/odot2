@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe UserSessionsController do
+  #let(:valid_attributes) { { "email" => "jason@teamtreehouse.com", "password" => "treehouse1" } }
+    #let(:valid_session) { {} }
+  
 
   describe "GET 'new'" do
     it "returns http success" do
@@ -17,6 +20,7 @@ describe UserSessionsController do
   describe "POST 'create'" do
     context "with correct credentials" do
       let!(:user) { User.create(first_name: "Jason", last_name: "Seifer", email: "jason@teamtreehouse.com", password: "treehouse1", password_confirmation: "treehouse1" )}
+      
       it "redirects to the todo list path" do
         post :create, email: "jason@teamtreehouse.com", password: "treehouse1"
         expect(response).to be_redirect
@@ -35,7 +39,7 @@ describe UserSessionsController do
         post :create, email: "jason@teamtreehouse.com", password: "treehouse1"
       end
       
-      it " sets the user_id in the session" do
+      it "sets the user_id in the session" do
         post :create, email: "jason@teamtreehouse.com", password: "treehouse1"
         expect(session[:user_id]).to eq(user.id)
       end 
@@ -43,7 +47,12 @@ describe UserSessionsController do
       it "sets the flash success message" do
         post :create, email: "jason@teamtreehouse.com", password: "treehouse1"
         expect(flash[:success]).to eq("Thanks for logging in!")
-      end       
+      end 
+      
+      #it "sets the session user_id to the created user" do
+        #post :create, {:user => valid_attributes}, valid_session
+        #expect(session[:user_id]).to eq(User.find_by(email: valid_attributes["email"]).id)
+        #end      
     end
     
     shared_examples_for "denied login" do
