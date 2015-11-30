@@ -58,7 +58,21 @@ describe User do
       user.email = "MIKE@TEAMTREEHOUSE.COM"
       expect(user.save).to be_true
       expect(user.email).to eq("mike@teamtreehouse.com")
+    end    
+  end
+  # ! => potentially dangerous method
+  describe "#generate_password_reset_token!" do
+    let(:user) { create(:user) }
+    
+    it "changes the password_reset_token attribute" do
+      #we use {} to have it in block, instead of () =>method. Thiss allow the code in {}
+      #to run rather than just beeing called
+      expect{ user.generate_password_reset_token!}.to change{user.password_reset_token}
     end
     
+    it "calls SecureRandom.urlsafe_base64 to generate the password_reset_token" do
+      expect(SecureRandom).to receive(:urlsafe_base64)
+      user.generate_password_reset_token!
+    end
   end
 end
