@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
+require 'capybara/email/rspec'
+
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
