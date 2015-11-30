@@ -1,14 +1,14 @@
 class TodoItemsController < ApplicationController
   before_action :require_user
   before_action :find_todo_list
-  
+
   def index
   end
-  
+
   def new
     @todo_item = @todo_list.todo_items.new
   end
-  
+
   def create
     @todo_item = @todo_list.todo_items.new(todo_item_params)
     if @todo_item.save
@@ -19,13 +19,13 @@ class TodoItemsController < ApplicationController
       render action: :new
     end
   end
-  
+
   def edit
-    @todo_item = @todo_list.todo_items.find(params[:id])   
+    @todo_item = @todo_list.todo_items.find(params[:id])
   end
-  
-  def update    
-    @todo_item = @todo_list.todo_items.find(params[:id]) 
+
+  def update
+    @todo_item = @todo_list.todo_items.find(params[:id])
     if @todo_item.update_attributes(todo_item_params)
       flash[:success] = "Saved todo list item."
       redirect_to todo_list_todo_items_path
@@ -34,10 +34,9 @@ class TodoItemsController < ApplicationController
       render action: :edit
     end
   end
-  
-  
+
   def destroy
-    @todo_item = @todo_list.todo_items.find(params[:id]) 
+    @todo_item = @todo_list.todo_items.find(params[:id])
     if @todo_item.destroy
       flash[:success] = "Todo list item was deleted."
     else
@@ -45,26 +44,24 @@ class TodoItemsController < ApplicationController
     end
     redirect_to todo_list_todo_items_path
   end
-  
+
   def complete
     @todo_item = @todo_list.todo_items.find(params[:id])
     @todo_item.update_attribute(:completed_at, Time.now)
-    redirect_to todo_list_todo_items_path, notice: "Todo item marked as complete"
+    redirect_to todo_list_todo_items_path, notice: "Todo item marked as complete."
   end
-  
-  
+
   def url_options
     { todo_list_id: params[:todo_list_id] }.merge(super)
   end
-  
-   private
-   
-   def find_todo_list
-     @todo_list = TodoList.find(params[:todo_list_id])
-   end
-  #something with Rails 4, we need to define stron parameters to tell rails
-  #what parameters it can work with.
+
+  private
+  def find_todo_list
+    @todo_list = current_user.todo_lists.find(params[:todo_list_id])
+  end
+
   def todo_item_params
     params[:todo_item].permit(:content)
   end
+
 end
